@@ -1,0 +1,16 @@
+{
+  "name": "wasteland-era",
+  "version": "1.0.0",
+  "description": "游戏背景废土纪元，，玩家作为幸存者求生，升级扩充势力，回收科技（蓝图），制作，建立聚居地，招募人员",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "typescript": "^5.7.3"
+  }
+}
