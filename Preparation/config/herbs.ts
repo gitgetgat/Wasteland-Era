@@ -1,5 +1,8 @@
-import { CropArgs } from "../../Typing/item-args";
-import { CropInterface, PropertyValueInterface } from "../../Typing/item-class";
+import { HerbsArgs } from "../../Typing/item-args";
+import {
+  HerbsInterface,
+  PropertyValueInterface,
+} from "../../Typing/item-class";
 import {
   Season,
   PropertyType,
@@ -11,7 +14,7 @@ import {
 import chalk from "chalk";
 
 // 物品——作物
-class Crop implements CropInterface {
+class Herbs implements HerbsInterface {
   id: string; // 全局ID
   label: string; // 名称
   desc: string | null; // 描述
@@ -29,7 +32,7 @@ class Crop implements CropInterface {
   value: PropertyValueInterface[]; // 效果数值
   set_need_num?: number | null; // 套装效果生效需要的套装数
 
-  constructor(args: CropArgs) {
+  constructor(args: HerbsArgs) {
     this.id = args[0];
     this.label = args[1];
     this.desc = args[2];
@@ -66,50 +69,30 @@ class Crop implements CropInterface {
   }
 }
 
-export const crop_list: CropArgs[] = [
+export const herbs_list: HerbsArgs[] = [
   [
-    "CROP_0001",
-    "土豆",
-    "土豆，又称马铃薯，是一种富含淀粉的根茎作物，营养丰富，用途广泛，可蒸、煮、炒、炸，是全球重要的粮食作物。",
+    "HERBS_0001",
+    "止血草",
+    "生长于阴湿森林，以红色花朵著称。它能迅速止血并加速伤口愈合，常被视为战士的救命草。在紧急时刻，轻压伤口便能止血并缓解疼痛，是珍贵的疗伤草药。",
     320,
-    "crop",
-    "fluent-emoji-high-contrast:potato",
+    "herbs",
+    "emojione-monotone--herb",
     1,
     true,
-    30,
+    15,
     0.5,
-    110,
+    20,
     [EffectScenario.NORMAL],
     EffectType.IMMEDIATE,
     EffectTarget.PLAYER,
-    [[PropertyType.HP, PropertyEffectCategory.BUFF, "%", 5]],
-  ],
-  [
-    "CROP_0002",
-    "羊角薯",
-    "羊角薯是一种形似羊角的红薯品种，因其独特的外形得名。它肉质细腻、甜度高，富含膳食纤维和多种维生素，既可蒸煮食用，也适合做甜品或烘焙。",
-    235,
-    "crop",
-    "fluent-emoji-high-contrast:potato",
-    1,
-    true,
-    30,
-    0.5,
-    85,
-    [EffectScenario.NORMAL],
-    EffectType.IMMEDIATE,
-    EffectTarget.PLAYER,
-    [
-      [PropertyType.HP, PropertyEffectCategory.BUFF, "%", 1],
-      [PropertyType.DEF, PropertyEffectCategory.BUFF, null, 10],
-    ],
+    [[PropertyType.HP, PropertyEffectCategory.BUFF, "%", 2]],
   ],
 ];
-export const createCrop = (): CropInterface[] => {
-  console.log("初始化 物品：" + chalk.yellow.bold(`作物`) + " 信息");
-  const CROP_LIST = crop_list.map((crop) => new Crop(crop));
-  // console.dir(CROP_LIST, { depth: null });
-  return CROP_LIST;
+export const createHerbs = (): HerbsInterface[] => {
+  console.log("初始化 物品：" + chalk.yellow.bold(`草药`) + " 信息");
+  const Herbs_LIST = herbs_list.map((herbs) => new Herbs(herbs));
+  console.dir(Herbs_LIST, { depth: null });
+  return Herbs_LIST;
 };
 
-createCrop();
+createHerbs();

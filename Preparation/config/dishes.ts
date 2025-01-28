@@ -1,17 +1,19 @@
-import { CropArgs } from "../../Typing/item-args";
-import { CropInterface, PropertyValueInterface } from "../../Typing/item-class";
+import { DishesArgs } from "../../Typing/item-args";
 import {
-  Season,
-  PropertyType,
+  DishesInterface,
+  PropertyValueInterface,
+} from "../../Typing/item-class";
+import {
   EffectScenario,
-  PropertyEffectCategory,
   EffectType,
   EffectTarget,
+  PropertyType,
+  PropertyEffectCategory,
 } from "../../Typing/enum-cfg";
 import chalk from "chalk";
 
-// 物品——作物
-class Crop implements CropInterface {
+// 物品——合成药
+class Dishes implements DishesInterface {
   id: string; // 全局ID
   label: string; // 名称
   desc: string | null; // 描述
@@ -23,13 +25,14 @@ class Crop implements CropInterface {
   stackMax: number; // 可堆叠最大数值
   quality: number; // 品质 1-5星，先限制在种植里或者烹饪里
   quality_price: number; // 品质的增值，每半颗心增值多少钱
+  formula_id: string[]; // 配方ID,
+  is_unlock_formula: Boolean; // 是否解锁了配方
   effect_limit: EffectScenario[]; // 效果限制范围类型 比如在什么场合可以使用，战斗、探索、种植、等等
   effect_type: EffectType; // 效果类型 即时效果(immediate)、持续效果(continued)
   target: EffectTarget; // 作用目标 玩家player、建筑building，队伍team、等等
-  value: PropertyValueInterface[]; // 效果数值
+  value: PropertyValueInterface[]; // 效果数值，最终效果受品质的影响，品质有加成
   set_need_num?: number | null; // 套装效果生效需要的套装数
-
-  constructor(args: CropArgs) {
+  constructor(args: DishesArgs) {
     this.id = args[0];
     this.label = args[1];
     this.desc = args[2];
@@ -41,10 +44,12 @@ class Crop implements CropInterface {
     this.stackMax = args[8];
     this.quality = args[9];
     this.quality_price = args[10];
-    this.effect_limit = args[11];
-    this.effect_type = args[12];
-    this.target = args[13];
-    this.value = args[14].map((e) => {
+    this.formula_id = args[11];
+    this.is_unlock_formula = args[12];
+    this.effect_limit = args[13];
+    this.effect_type = args[14];
+    this.target = args[15];
+    this.value = args[16].map((e) => {
       const ele = {
         property_type: e[0], // 属性类型
         type: e[1], // 正面或者负面效果
@@ -54,8 +59,9 @@ class Crop implements CropInterface {
       if (e[4]) ele.duration = e[4];
       return ele;
     });
-    if (args[15]) this.set_need_num = args[15];
+    if (args[17]) this.set_need_num = args[17];
   }
+
   // 获取综合物品价格
   getQualityPrice(): number {
     // 以0.5星为基准，每多0.5星，多0.2倍品质价+物品价
@@ -66,50 +72,36 @@ class Crop implements CropInterface {
   }
 }
 
-export const crop_list: CropArgs[] = [
+export const dishes_list: DishesArgs[] = [
   [
-    "CROP_0001",
-    "土豆",
-    "土豆，又称马铃薯，是一种富含淀粉的根茎作物，营养丰富，用途广泛，可蒸、煮、炒、炸，是全球重要的粮食作物。",
-    320,
-    "crop",
-    "fluent-emoji-high-contrast:potato",
+    "DISHES_0001",
+    "土豆泥",
+    "",
+    75,
+    ["dishes"],
+    "mingcute--dish-cover-line",
     1,
     true,
-    30,
+    70,
     0.5,
-    110,
-    [EffectScenario.NORMAL],
+    145,
+    ["FORMULA_0001"],
+    false,
+    [EffectScenario.NORMAL, EffectScenario.COMBAT, EffectScenario.HUNT],
     EffectType.IMMEDIATE,
     EffectTarget.PLAYER,
-    [[PropertyType.HP, PropertyEffectCategory.BUFF, "%", 5]],
-  ],
-  [
-    "CROP_0002",
-    "羊角薯",
-    "羊角薯是一种形似羊角的红薯品种，因其独特的外形得名。它肉质细腻、甜度高，富含膳食纤维和多种维生素，既可蒸煮食用，也适合做甜品或烘焙。",
-    235,
-    "crop",
-    "fluent-emoji-high-contrast:potato",
-    1,
-    true,
-    30,
-    0.5,
-    85,
-    [EffectScenario.NORMAL],
-    EffectType.IMMEDIATE,
-    EffectTarget.PLAYER,
-    [
-      [PropertyType.HP, PropertyEffectCategory.BUFF, "%", 1],
-      [PropertyType.DEF, PropertyEffectCategory.BUFF, null, 10],
-    ],
+    [[PropertyType.HP, PropertyEffectCategory.BUFF, null, 30, "00-00-15"]],
+    null,
   ],
 ];
-export const createCrop = (): CropInterface[] => {
-  console.log("初始化 物品：" + chalk.yellow.bold(`作物`) + " 信息");
-  const CROP_LIST = crop_list.map((crop) => new Crop(crop));
-  // console.dir(CROP_LIST, { depth: null });
-  return CROP_LIST;
+
+export const createDishes = (): DishesInterface[] => {
+  console.log("初始化 物品：" + chalk.yellow.bold(`菜肴`) + " 信息");
+  const DISHES_LIST: DishesInterface[] = dishes_list.map(
+    (dishes) => new Dishes(dishes)
+  );
+  console.dir(DISHES_LIST, { depth: null });
+  return DISHES_LIST;
 };
 
-createCrop();
+createDishes();
