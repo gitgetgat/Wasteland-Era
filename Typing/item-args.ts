@@ -61,6 +61,7 @@ export type FormulaItemArgs = [ele_id: string, ele_num: number];
 
 // 物品——含有配方
 export type hasFormulaArgs = [
+  level: number, // 解锁等级
   formula_id: string[], // 配方ID,
   is_unlock_formula: Boolean // 是否解锁了配方
 ];

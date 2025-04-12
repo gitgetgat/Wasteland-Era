@@ -64,8 +64,8 @@ export interface SetCategoryInterface {
 // 物品——种子
 export interface SeedInterface
   extends ItemBaseInterface,
-    ItemStackInterface,
-    ItemQualityInterface {
+  ItemStackInterface,
+  ItemQualityInterface {
   season: Season; // 耕种的季节
   crop_id: string; // 产出的作物ID
   duration: string; // 种植需要的时长，小时-分钟-秒
@@ -74,23 +74,24 @@ export interface SeedInterface
 // 物品——作物
 export interface CropInterface
   extends ItemBaseInterface,
-    ItemStackInterface,
-    ItemQualityInterface,
-    EffectInterface {}
+  ItemStackInterface,
+  ItemQualityInterface,
+  EffectInterface { }
 
 // 物品——草药
 export interface HerbsInterface
   extends ItemBaseInterface,
-    ItemStackInterface,
-    ItemQualityInterface,
-    EffectInterface {}
+  ItemStackInterface,
+  ItemQualityInterface,
+  EffectInterface { }
 
 // 物品——合成药
 export interface DrugsInterface
   extends ItemBaseInterface,
-    ItemStackInterface,
-    ItemQualityInterface,
-    EffectInterface {
+  ItemStackInterface,
+  ItemQualityInterface,
+  EffectInterface {
+  level: number; // 解锁等级
   formula_id: string[]; // 配方ID,
   is_unlock_formula: Boolean; // 是否解锁了配方
 }
@@ -98,9 +99,10 @@ export interface DrugsInterface
 // 物品——菜肴
 export interface DishesInterface
   extends ItemBaseInterface,
-    ItemStackInterface,
-    ItemQualityInterface,
-    EffectInterface {
+  ItemStackInterface,
+  ItemQualityInterface,
+  EffectInterface {
+  level: number; // 解锁等级
   formula_id: string[]; // 配方ID,
   is_unlock_formula: Boolean; // 是否解锁了配方
 }
@@ -112,12 +114,12 @@ export interface ItemQualityOtherArgs {
 // 物品——普通（无效果）
 export interface ItemPropsNormalInterface
   extends ItemBaseInterface,
-    ItemStackInterface,
-    ItemQualityOtherArgs {}
+  ItemStackInterface,
+  ItemQualityOtherArgs { }
 
 // 物品——普通（有效果）
 export interface ItemPropsHasEffectInterface
   extends ItemBaseInterface,
-    ItemStackInterface,
-    EffectInterface,
-    ItemQualityOtherArgs {}
+  ItemStackInterface,
+  EffectInterface,
+  ItemQualityOtherArgs { }

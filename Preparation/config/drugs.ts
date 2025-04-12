@@ -25,6 +25,7 @@ class Drugs implements DrugsInterface {
   stackMax: number; // 可堆叠最大数值
   quality: number; // 品质 1-5星，先限制在种植里或者烹饪里
   quality_price: number; // 品质的增值，每半颗心增值多少钱
+  level: number; // 解锁等级
   formula_id: string[]; // 配方ID,
   is_unlock_formula: Boolean; // 是否解锁了配方
   effect_limit: EffectScenario[]; // 效果限制范围类型 比如在什么场合可以使用，战斗、探索、种植、等等
@@ -44,12 +45,13 @@ class Drugs implements DrugsInterface {
     this.stackMax = args[8];
     this.quality = args[9];
     this.quality_price = args[10];
-    this.formula_id = args[11];
-    this.is_unlock_formula = args[12];
-    this.effect_limit = args[13];
-    this.effect_type = args[14];
-    this.target = args[15];
-    this.value = args[16].map((e) => {
+    this.level = args[11];
+    this.formula_id = args[12];
+    this.is_unlock_formula = args[13];
+    this.effect_limit = args[14];
+    this.effect_type = args[15];
+    this.target = args[16];
+    this.value = args[17].map((e) => {
       const ele = {
         property_type: e[0], // 属性类型
         type: e[1], // 正面或者负面效果
@@ -59,7 +61,7 @@ class Drugs implements DrugsInterface {
       if (e[4]) ele.duration = e[4];
       return ele;
     });
-    if (args[17]) this.set_need_num = args[17];
+    if (args[18]) this.set_need_num = args[18];
   }
 
   // 获取综合物品价格
@@ -67,7 +69,7 @@ class Drugs implements DrugsInterface {
     // 以0.5星为基准，每多0.5星，多0.2倍品质价+物品价
     return Math.floor(
       this.price +
-        (this.quality / 0.5 - 1) * 0.2 * (this.quality_price + this.price)
+      (this.quality / 0.5 - 1) * 0.2 * (this.quality_price + this.price)
     );
   }
 }
@@ -85,6 +87,7 @@ export const drugs_list: DrugsArgs[] = [
     40,
     0.5,
     45,
+    1,
     ["FORMULA_0501"],
     false,
     [EffectScenario.NORMAL, EffectScenario.COMBAT, EffectScenario.HUNT],
@@ -100,7 +103,39 @@ export const createDrugs = (): DrugsInterface[] => {
   const DRUGS_LIST: DrugsInterface[] = drugs_list.map(
     (drug) => new Drugs(drug)
   );
-  // console.dir(DRUGS_LIST, { depth: null });
+  DRUGS_LIST.forEach(drug => {
+    console.log('\n药品详细信息:');
+    console.log(`id (全局ID): ${drug.id}`);
+    console.log(`label (名称): ${drug.label}`);
+    console.log(`desc (描述): ${drug.desc}`);
+    console.log(`price (价值): ${drug.price}`);
+    console.log(`type (类型): ${drug.type}`);
+    console.log(`icon (图标): ${drug.icon}`);
+    console.log(`count (数量): ${drug.count}`);
+    console.log(`stackable (可堆叠): ${drug.stackable}`);
+    console.log(`stackMax (可堆叠最大数值): ${drug.stackMax}`);
+    console.log(`quality (品质1-5星): ${drug.quality}`);
+    console.log(`quality_price (品质增值): ${drug.quality_price}`);
+    console.log(`level (解锁等级): ${drug.level}`);
+    console.log(`formula_id (配方ID): ${drug.formula_id}`);
+    console.log(`is_unlock_formula (是否解锁配方): ${drug.is_unlock_formula}`);
+    console.log(`effect_limit (效果限制范围): ${drug.effect_limit}`);
+    console.log(`effect_type (效果类型): ${drug.effect_type}`);
+    console.log(`target (作用目标): ${drug.target}`);
+    console.log('value (效果数值):');
+    drug.value.forEach((val, index) => {
+      console.log(`  效果 ${index + 1}:`);
+      console.log(`    property_type (属性类型): ${val.property_type}`);
+      console.log(`    type (效果类型): ${val.type}`);
+      console.log(`    unit (计算单位): ${val.unit}`);
+      console.log(`    val (效果数值): ${val.val}`);
+      if (val.duration) console.log(`    duration (持续时间): ${val.duration}`);
+    });
+    if (drug.set_need_num !== undefined) {
+      console.log(`set_need_num (套装需求数量): ${drug.set_need_num}`);
+    }
+    console.log('------------------------');
+  });
   return DRUGS_LIST;
 };
 
